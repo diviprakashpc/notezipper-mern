@@ -7,8 +7,10 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 const Header = () => {
+  const history = useHistory();
   return (
     <Navbar bg="primary" expand="lg" variant="dark">
       <Container>
@@ -34,7 +36,15 @@ const Header = () => {
 
             <NavDropdown title="Divya Prakash" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">My profile</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">Logout</NavDropdown.Item>
+              <NavDropdown.Item
+                onClick={() => {
+                  localStorage.removeItem("userInfo");
+                  history.push("/");
+                }}
+                href="#action4"
+              >
+                Logout
+              </NavDropdown.Item>
               <NavDropdown.Divider />
             </NavDropdown>
           </Nav>
