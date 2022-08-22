@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ErrorMessage from "../../components/ErrorMessage.js/ErrorMessage";
 import Loading from "../../components/Loading/Loading";
 import MainScreen from "../../components/MainScreen";
@@ -17,6 +17,7 @@ const RegisterScreen = () => {
   const [confirmpassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
   const [picMessage, setPicMessage] = useState(null);
+  const dispatch = useDispatch();
   const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo } = userRegister;
  const history = useHistory();
@@ -31,7 +32,7 @@ const RegisterScreen = () => {
     if (password !== confirmpassword) {
       setMessage("Passwords do not match");
     } else {
-      dispatchEvent(register(name, email, password, pic));
+      dispatch(register(name, email, password, pic));
     }
   };
 
