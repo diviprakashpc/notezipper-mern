@@ -1,10 +1,12 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import ErrorMessage from "../../components/ErrorMessage.js/ErrorMessage";
 import Loading from "../../components/Loading/Loading";
 import MainScreen from "../../components/MainScreen";
-
+import { useHistory } from "react-router-dom";
+import { register } from "../../actions/userActions";
 const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -15,37 +17,22 @@ const RegisterScreen = () => {
   const [confirmpassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
   const [picMessage, setPicMessage] = useState(null);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const userRegister = useSelector((state) => state.userRegister);
+  const { loading, error, userInfo } = userRegister;
+ const history = useHistory();
+  useEffect(() => {
+    if (userInfo) {
+      history.push("/mynotes");
+    }
+  }, [history, userInfo]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     if (password !== confirmpassword) {
-      setMessage("Passwords Do not Match");
+      setMessage("Passwords do not match");
     } else {
-      setMessage(null);
-      try {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-          },
-        };
-        setLoading(true);
-        const { data } = await axios.post(
-          "/api/users/",
-          { name, pic, email, password },
-          config
-        );
-
-        console.log(data);
-        setLoading(false);
-        localStorage.setItem("userInfo", JSON.stringify(data));
-      } catch (error) {
-        setLoading(false);
-        setError(error.response.data.message);
-      }
+      dispatchEvent(register(name, email, password, pic));
     }
-    console.log(email);
   };
 
   const postDetails = (pics) => {
@@ -53,7 +40,7 @@ const RegisterScreen = () => {
       return setPicMessage("Please Select an Image");
     }
     setPicMessage(null);
-    if (pics.type === "image/jped" || pics.type === "image/png") {
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
       data.append("upload_preset", "notezipper");

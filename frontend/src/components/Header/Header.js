@@ -7,10 +7,20 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
-const Header = () => {
+import { logout } from "../../actions/userActions";
+const Header = ({ setSearch }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    history.push("/");
+  };
   return (
     <Navbar bg="primary" expand="lg" variant="dark">
       <Container>
@@ -26,6 +36,7 @@ const Header = () => {
                 placeholder="Search"
                 className="me-2"
                 aria-label="Search"
+                onChange={(e) => setSearch(e.target.value)}
               />
             </Form>
           </Nav>
@@ -36,13 +47,7 @@ const Header = () => {
 
             <NavDropdown title="Divya Prakash" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">My profile</NavDropdown.Item>
-              <NavDropdown.Item
-                onClick={() => {
-                  localStorage.removeItem("userInfo");
-                  history.push("/");
-                }}
-                href="#action4"
-              >
+              <NavDropdown.Item onClick={logoutHandler} href="#action4">
                 Logout
               </NavDropdown.Item>
               <NavDropdown.Divider />
