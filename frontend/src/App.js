@@ -9,7 +9,7 @@ import LoginScreen from "./Screens/LoginScreen/LoginScreen";
 import CreateNote from "./Screens/CreateNote/CreateNote";
 import SingleNote from "./Screens/SingleNote/SingleNote";
 import { useState } from "react";
-import ProfileScreen from "./Screens/ProfileScreen/ProfileScreen.js";
+import ProfileScreen from "./Screens/ProfileScreens/ProfileScreen";
 function App() {
   const [search, setSearch] = useState("");
   console.log(search);
